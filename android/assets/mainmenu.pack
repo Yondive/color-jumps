@@ -1,0 +1,26 @@
+
+mainmenu.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button-start
+  rotate: false
+  xy: 1, 203
+  size: 350, 280
+  orig: 350, 280
+  offset: 0, 0
+  index: -1
+button-about
+  rotate: false
+  xy: 1, 1
+  size: 250, 200
+  orig: 250, 200
+  offset: 0, 0
+  index: -1
+button-leaderboard
+  rotate: false
+  xy: 253, 1
+  size: 250, 200
+  orig: 250, 200
+  offset: 0, 0
+  index: -1
