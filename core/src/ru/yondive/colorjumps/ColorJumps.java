@@ -10,13 +10,12 @@ public class ColorJumps extends Game {
 	
 	@Override
 	public void create() {
-
-		setScreen(new MainMenu());
+		Assets.load();
+		setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
 	public void dispose() {
-
 		super.dispose();
 	}
 

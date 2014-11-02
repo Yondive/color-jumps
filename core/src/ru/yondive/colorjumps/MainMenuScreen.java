@@ -4,25 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-
-public class MainMenu implements Screen {
+public class MainMenuScreen implements Screen {
+	
+	private ColorJumps game;
+	
 	private Stage stage;
-	private TextureAtlas atlas;
-	private Skin skin;
 	private Table table;
 	private Button buttonScore, buttonPlay, buttonAbout;
-	private BitmapFont whiteFont;
 	private Label heading;
+
+	public MainMenuScreen(ColorJumps game) {
+		this.game = game;
+	}
+	
 	
 	
 	@Override
@@ -37,27 +35,29 @@ public class MainMenu implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		
-		
 	}
 
 	@Override
 	public void show() {
-		whiteFont = new BitmapFont(Gdx.files.internal("fonts/consbold.fnt"), false);
-		
 		stage = new Stage(new StretchViewport(ColorJumps.WIDTH, ColorJumps.HEIGHT));
-		atlas = new TextureAtlas("mainmenu.pack");
-		skin = new Skin(atlas);
-		table = new Table(skin);
+		Gdx.input.setInputProcessor(stage);
+		
+		table = new Table(Assets.skin);
 		table.setBounds(0, 0,  ColorJumps.WIDTH,  ColorJumps.HEIGHT);
 		
-		Label.LabelStyle headingStyle = new Label.LabelStyle(whiteFont, Color.WHITE);
-		heading = new Label("COLOR JUMPS", headingStyle);
+		heading = new Label("Color Jumps", new Label.LabelStyle(Assets.whiteFont, Color.WHITE));
 
-
+		buttonPlay = new Button(Assets.skin.getDrawable("button-start"));
+		buttonScore = new Button(Assets.skin.getDrawable("button-leaderboard"));
+		buttonAbout = new Button(Assets.skin.getDrawable("button-about"));
 		
-		buttonPlay = new Button(skin.getDrawable("button-start"));
-		buttonScore = new Button(skin.getDrawable("button-leaderboard"));
-		buttonAbout = new Button(skin.getDrawable("button-about"));
+		buttonPlay.addListener(new InputListener() {
+		    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+		    	game.setScreen(new GameScreen(game));
+		        return true;
+		    }
+		});
+		
 		
 		table.add(heading).colspan(2).padTop(50);
 		table.row().padTop(250);
@@ -89,8 +89,7 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void dispose() {
-		
-		
+		stage.dispose();
 	}
 
 }
