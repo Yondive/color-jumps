@@ -16,6 +16,5 @@ public class Assets {
 		
 		TextureAtlas atlas = new TextureAtlas("mainmenu.pack");
 		skin = new Skin(atlas);
-		jumperTR = atlas.findRegion("button-about");
 	}
 }

@@ -61,6 +61,8 @@ public class GameScreen implements Screen {
 	private World world;
 	
 	private boolean colorChanged = false;
+	private Label scoreLabel;
+	private int scoreInt;
 	
 	public GameScreen(ColorJumps game) {
 		this.game = game;
@@ -74,10 +76,15 @@ public class GameScreen implements Screen {
 		Label pause = new Label("P", new Label.LabelStyle(Assets.whiteFont, Color.BLUE));
 		pause.addListener(pauseListener);
 		pause.setPosition(ColorJumps.WIDTH - pause.getWidth(), ColorJumps.HEIGHT - pause.getHeight());
+		
+		scoreLabel = new Label("0", new Label.LabelStyle(Assets.whiteFont, Color.BLUE));
+		scoreLabel.addListener(pauseListener);
+		scoreLabel.setPosition(scoreLabel.getWidth(), ColorJumps.HEIGHT - scoreLabel.getHeight());
 
 		staticStage = new Stage(new StretchViewport(ColorJumps.WIDTH, ColorJumps.HEIGHT), batch);
 		staticStage.addListener(colorChangeListener);
 		staticStage.addActor(pause);
+		staticStage.addActor(scoreLabel);
 		Gdx.input.setInputProcessor(staticStage);
 		
 		/* Filling pause stage*/
@@ -93,7 +100,7 @@ public class GameScreen implements Screen {
 		pauseStage.addActor(go);
 		pauseStage.addActor(exit);
 		
-		world = new World(batch);
+		world = new World(batch, game);
 		
 		state = States.Running;
 	}
@@ -116,15 +123,15 @@ public class GameScreen implements Screen {
 		
 			case Running:
 				ApplicationType appType = Gdx.app.getType();
-
+				float accel = 0f;
 				if (appType == ApplicationType.Android || appType == ApplicationType.iOS) {
-					world.update(delta, Gdx.input.getAccelerometerX(), colorChanged);
+					accel = -Gdx.input.getAccelerometerX();
 				} else {
-					float accel = 0;
-					if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) accel = 5f;
-					if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) accel = -5f;
-					world.update(delta, accel, colorChanged);
+					if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) accel = -5f;
+					if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) accel = 5f;
 				}
+				scoreInt = Math.max(world.update(delta, accel, colorChanged), scoreInt);
+				scoreLabel.setText(Integer.toString(scoreInt));
 				colorChanged = false;
 				break;
 			case Paused:
@@ -138,10 +145,11 @@ public class GameScreen implements Screen {
 		switch (state) {
 		
 		case Running:
-			staticStage.draw();
 			world.draw();
+			staticStage.draw();
 			break;
 		case Paused:
+			world.draw();
 			pauseStage.draw();
 			break;
 		default:
@@ -165,6 +173,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resume() {
+	
 	}
 
 	@Override
