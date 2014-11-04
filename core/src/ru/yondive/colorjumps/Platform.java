@@ -1,7 +1,7 @@
 package ru.yondive.colorjumps;
 
 public class Platform extends GameObject {
-	public static final float HEIGHT = 1f;
+	public static final float HEIGHT = 0.5f;
 	public static final float WIDTH = 5f;
 	
 	
@@ -10,7 +10,7 @@ public class Platform extends GameObject {
 	}
 	
 	public void checkCollision(Jumper jumper) {
-		if (jumper.isSameColor(color) && jumper.isOverlaps(bounds)) {
+		if (jumper.isSameColor(color) && bounds.overlaps(jumper.bounds)) {
 			jumper.hitPlatform();
 		}
 	}

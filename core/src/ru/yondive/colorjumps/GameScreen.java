@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
 	private InputListener colorChangeListener = new InputListener() {
 	    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 	    	if (event.getListenerActor().hit(x, y, true) == null) {
-	    		colorChanged = true;
+	    		isColorChanged = true;
 	    	}
 	        return true;
 	    }
@@ -60,12 +60,12 @@ public class GameScreen implements Screen {
 	
 	private World world;
 	
-	private boolean colorChanged = false;
 	private Label scoreLabel;
-	private int scoreInt;
+	private boolean isColorChanged;
 	
 	public GameScreen(ColorJumps game) {
 		this.game = game;
+		this.isColorChanged = false;
 	}
 	
 	@Override
@@ -130,9 +130,9 @@ public class GameScreen implements Screen {
 					if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) accel = -5f;
 					if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) accel = 5f;
 				}
-				scoreInt = Math.max(world.update(delta, accel, colorChanged), scoreInt);
-				scoreLabel.setText(Integer.toString(scoreInt));
-				colorChanged = false;
+				world.update(delta, accel, isColorChanged);
+				scoreLabel.setText(Integer.toString(world.getScore()));
+				isColorChanged = false;
 				break;
 			case Paused:
 				
@@ -143,32 +143,33 @@ public class GameScreen implements Screen {
 	}
 	private void draw() {
 		switch (state) {
-		
-		case Running:
-			world.draw();
-			staticStage.draw();
-			break;
-		case Paused:
-			world.draw();
-			pauseStage.draw();
-			break;
-		default:
-			break;
+			case Running:
+				world.draw();
+				staticStage.draw();
+				break;
+			case Paused:
+				world.draw();
+				pauseStage.draw();
+				break;
+			default:
+				break;
+		}
 	}
-		
-	}
-
 	
 	@Override
 	public void hide() {
-		
-		
+		if (state == States.Running) {
+	    	state = States.Paused;
+	    	Gdx.input.setInputProcessor(pauseStage);
+		}
 	}
 
 	@Override
 	public void pause() {	
-		if (state == States.Running)
-			state = States.Paused;
+		if (state == States.Running) {
+	    	state = States.Paused;
+	    	Gdx.input.setInputProcessor(pauseStage);
+		}
 	}
 
 	@Override
@@ -179,7 +180,5 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		staticStage.dispose();
-	}
-	
-	
+	}	
 }

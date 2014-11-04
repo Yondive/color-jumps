@@ -38,7 +38,7 @@ public class GameObject extends Actor {
 	
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
-	    batch.end();
+
 
 	    renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	    renderer.setTransformMatrix(batch.getTransformMatrix());
@@ -49,6 +49,6 @@ public class GameObject extends Actor {
 	    renderer.rect(0, 0, getWidth(), getHeight());
 	    renderer.end();
 	    
-	    batch.begin();
+
 	}
 }
