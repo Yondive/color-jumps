@@ -1,5 +1,7 @@
 package ru.yondive.colorjumps;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -57,5 +59,21 @@ public class Jumper extends GameObject {
 			velocity.y = START_VELOCITY_Y;
 			state = JumperStates.JUMP;
 		}
+	}
+	
+	@Override
+	public void draw (Batch batch, float parentAlpha) {
+
+
+	    renderer.setProjectionMatrix(batch.getProjectionMatrix());
+	    renderer.setTransformMatrix(batch.getTransformMatrix());
+	    renderer.translate(position.x, position.y, 0);
+
+	    renderer.begin(ShapeType.Filled);
+	    renderer.setColor(colors[color]);
+	    renderer.rect(0, 0, getWidth(), getHeight());
+	    renderer.end();
+	    
+
 	}
 }

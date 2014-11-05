@@ -23,22 +23,23 @@ public class World {
 	private Stage stage;
 	private Jumper jumper;
 	
-	private List<Platform> platforms;
+	private ArrayList<Platform> platforms;
+	private ArrayList<Enemy> enemies;
 	
 	private ColorJumps game;
 	private Random rand;
-	private int level;
 	private int score;
 	
 	public World(Batch batch, ColorJumps game) {
 		this.platforms = new ArrayList<Platform>();
+		this.enemies = new ArrayList<Enemy>();
 		this.game = game;
 		this.rand = new Random();
 		stage = new Stage(new StretchViewport(WIDTH, HEIGHT), batch);
 		jumper = new Jumper(WIDTH / 2, FUND_HEIGHT);
 		stage.addActor(jumper);
 		score = 0;
-		addCreature();
+		
 	}
 	
 	public int getScore() {
@@ -48,6 +49,10 @@ public class World {
 	public int update(float delta, float accel, boolean isColorChanged) {
 		jumper.update(delta, accel, isColorChanged);
 		
+		for (Platform p : platforms) {
+			p.update(delta);;
+		}
+		
 		score = Math.max(score, (int)jumper.getY());
 		
 		/* Check platforms collisions */
@@ -56,8 +61,21 @@ public class World {
 			if (platforms.get(i).position.y < lowBoard) {
 				platforms.remove(i--);
 			}
-			else
-				platforms.get(i).checkCollision(jumper);
+			else {
+				if (platforms.get(i).checkCollision(jumper))
+					jumper.hitPlatform();;
+			}
+		}
+		
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemies.get(i).position.y < lowBoard) {
+				enemies.remove(i--);
+			}
+			else {
+				if (enemies.get(i).checkCollision(jumper)) {
+					return -1;
+				}
+			}
 		}
 		
 		/* Check game over */
@@ -77,10 +95,16 @@ public class World {
 	
 	private void addCreature() {
 		for (int i = 1; i < 20; i++) {
-			platforms.add(new Platform(rand.nextFloat() * 15f, i * MAX_PLATFORM_SPACE, rand.nextInt(3)));
+			platforms.add(new Platform(rand.nextFloat() * 15f, i * MAX_PLATFORM_SPACE, rand.nextInt(4), 1));
+		}
+		for (int i = 1; i < 20; i++) {
+			enemies.add(new Enemy(rand.nextFloat() * 15f, 6 + i * MAX_PLATFORM_SPACE, rand.nextInt(4)));
 		}
 		for (Platform p : platforms) {
 			stage.addActor(p);
+		}
+		for (Enemy e : enemies) {
+			stage.addActor(e);
 		}
 	}
 }

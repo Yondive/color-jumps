@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 public class GameScreen implements Screen {
 	
 	private enum States {
-		Running, Paused, GameOver
+		Running, Paused, GameOver, Wait
 	}
 	
 	private InputListener pauseListener = new InputListener() {
@@ -53,9 +53,9 @@ public class GameScreen implements Screen {
 	
 	private InputListener newGameListener = new InputListener() {
 	    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-	    	//TODO make
-	    	game.setScreen(new GameScreen(game));
-	    	
+	    	world = new World(batch, game);
+	    	state = States.Running;
+	    	Gdx.input.setInputProcessor(staticStage);
 	        return true;
 	    }
 	};
@@ -71,6 +71,7 @@ public class GameScreen implements Screen {
 	private World world;
 	
 	private Label scoreLabel;
+	private Label menuScoreLabel;
 	private boolean isColorChanged;
 	
 	public GameScreen(ColorJumps game) {
@@ -88,7 +89,6 @@ public class GameScreen implements Screen {
 		pause.setPosition(ColorJumps.WIDTH - pause.getWidth(), ColorJumps.HEIGHT - pause.getHeight());
 		
 		scoreLabel = new Label("0", new Label.LabelStyle(Assets.whiteFont, Color.BLUE));
-		scoreLabel.addListener(pauseListener);
 		scoreLabel.setPosition(scoreLabel.getWidth(), ColorJumps.HEIGHT - scoreLabel.getHeight());
 
 		staticStage = new Stage(new StretchViewport(ColorJumps.WIDTH, ColorJumps.HEIGHT), batch);
@@ -98,20 +98,39 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(staticStage);
 		
 		/* Filling pause stage*/
-		Label go = new Label("Continue", new Label.LabelStyle(Assets.whiteFont, Color.RED));
+		menuScoreLabel = new Label("0", new Label.LabelStyle(Assets.whiteFont, Color.BLACK));
+		menuScoreLabel.setPosition(ColorJumps.WIDTH / 2 - menuScoreLabel.getWidth() / 2, ColorJumps.HEIGHT / 2 + 2 * menuScoreLabel.getHeight());
+		
+		Label go = new Label("Continue", new Label.LabelStyle(Assets.whiteFont,  Color.BLACK));
 		go.addListener(continueListener);
 		go.setPosition(ColorJumps.WIDTH / 2 - go.getWidth() / 2, ColorJumps.HEIGHT / 2 + go.getHeight());
 		
-		Label exit = new Label("Exit", new Label.LabelStyle(Assets.whiteFont, Color.RED));
-		exit.addListener(exitListener);
-		exit.setPosition(ColorJumps.WIDTH / 2 - exit.getWidth() / 2, ColorJumps.HEIGHT / 2 - exit.getHeight());
+		Label exit1 = new Label("Exit", new Label.LabelStyle(Assets.whiteFont, Color.BLACK));
+		exit1.addListener(exitListener);
+		exit1.setPosition(ColorJumps.WIDTH / 2 - exit1.getWidth() / 2, ColorJumps.HEIGHT / 2 - exit1.getHeight());
 		
 		pauseStage = new Stage(new StretchViewport(ColorJumps.WIDTH, ColorJumps.HEIGHT), batch);
 		pauseStage.addActor(go);
-		pauseStage.addActor(exit);
+		pauseStage.addActor(exit1);
+		
+		/* Filling game over stage */
+		menuScoreLabel = new Label("You get 0", new Label.LabelStyle(Assets.whiteFont, Color.PURPLE));
+		menuScoreLabel.setPosition(ColorJumps.WIDTH / 2 - menuScoreLabel.getWidth() / 2, ColorJumps.HEIGHT - 2 * menuScoreLabel.getHeight());
+		
+		Label exit2 = new Label("Exit", new Label.LabelStyle(Assets.whiteFont, Color.BLACK));
+		exit2.addListener(exitListener);
+		exit2.setPosition(ColorJumps.WIDTH / 2 - exit2.getWidth() / 2, ColorJumps.HEIGHT / 2 - exit2.getHeight());
+		
+		Label newGame= new Label("New Game", new Label.LabelStyle(Assets.whiteFont,  Color.BLACK));
+		newGame.addListener(newGameListener);
+		newGame.setPosition(ColorJumps.WIDTH / 2 - newGame.getWidth() / 2, ColorJumps.HEIGHT / 2 + newGame.getHeight());
+		
+		gameOverStage = new Stage(new StretchViewport(ColorJumps.WIDTH, ColorJumps.HEIGHT), batch);
+		gameOverStage.addActor(menuScoreLabel);
+		gameOverStage.addActor(newGame);
+		gameOverStage.addActor(exit2);
 		
 		world = new World(batch, game);
-		
 		state = States.Running;
 	}
 	@Override
@@ -146,6 +165,8 @@ public class GameScreen implements Screen {
 				isColorChanged = false;
 				if (isGameOver) {
 					state = States.GameOver;
+					Gdx.input.setInputProcessor(gameOverStage);
+					menuScoreLabel.setText("You get " + Integer.toString(world.getScore()));
 				} 
 				break;
 			case Paused:
@@ -166,10 +187,12 @@ public class GameScreen implements Screen {
 				break;
 			case Paused:
 				world.draw();
+				staticStage.draw();
 				pauseStage.draw();
 				break;
 			case GameOver:
-				
+				world.draw();
+				gameOverStage.draw();
 				break;
 			default:
 				break;
