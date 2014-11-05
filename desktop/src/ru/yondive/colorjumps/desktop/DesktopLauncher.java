@@ -9,8 +9,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Color Jumps";
 		config.useGL30 = false;
-		config.width = 480;
-		config.height = 800;
+		config.width = 240;
+		config.height = 400;
 		
 		new LwjglApplication(new ColorJumps(), config);
 	}

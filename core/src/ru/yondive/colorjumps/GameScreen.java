@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 public class GameScreen implements Screen {
 	
 	private enum States {
-		Running, Paused
+		Running, Paused, GameOver
 	}
 	
 	private InputListener pauseListener = new InputListener() {
@@ -51,10 +51,20 @@ public class GameScreen implements Screen {
 	    }
 	};
 	
+	private InputListener newGameListener = new InputListener() {
+	    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+	    	//TODO make
+	    	game.setScreen(new GameScreen(game));
+	    	
+	        return true;
+	    }
+	};
+	
 	private ColorJumps game;
 
 	private Stage staticStage;
 	private Stage pauseStage;
+	private Stage gameOverStage;
 	private SpriteBatch batch;
 	private States state;
 	
@@ -130,11 +140,18 @@ public class GameScreen implements Screen {
 					if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) accel = -5f;
 					if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) accel = 5f;
 				}
-				world.update(delta, accel, isColorChanged);
+				
+				boolean isGameOver = world.update(delta, accel, isColorChanged) == -1;
 				scoreLabel.setText(Integer.toString(world.getScore()));
 				isColorChanged = false;
+				if (isGameOver) {
+					state = States.GameOver;
+				} 
 				break;
 			case Paused:
+				
+				break;
+			case GameOver:
 				
 				break;
 			default:
@@ -150,6 +167,9 @@ public class GameScreen implements Screen {
 			case Paused:
 				world.draw();
 				pauseStage.draw();
+				break;
+			case GameOver:
+				
 				break;
 			default:
 				break;
