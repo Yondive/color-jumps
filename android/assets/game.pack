@@ -1,0 +1,96 @@
+
+game.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background
+  rotate: false
+  xy: 1, 339
+  size: 800, 1280
+  orig: 800, 1280
+  offset: 0, 0
+  index: -1
+background_fund
+  rotate: false
+  xy: 1, 209
+  size: 800, 128
+  orig: 800, 128
+  offset: 0, 0
+  index: -1
+platformblack
+  rotate: false
+  xy: 803, 1579
+  size: 200, 40
+  orig: 200, 40
+  offset: 0, 0
+  index: -1
+platformblue
+  rotate: false
+  xy: 1, 167
+  size: 200, 40
+  orig: 200, 40
+  offset: 0, 0
+  index: -1
+platformgreen
+  rotate: false
+  xy: 803, 1537
+  size: 200, 40
+  orig: 200, 40
+  offset: 0, 0
+  index: -1
+platformred
+  rotate: false
+  xy: 1, 125
+  size: 200, 40
+  orig: 200, 40
+  offset: 0, 0
+  index: -1
+jumperblue
+  rotate: false
+  xy: 203, 127
+  size: 40, 80
+  orig: 40, 80
+  offset: 0, 0
+  index: -1
+jumpergreen
+  rotate: false
+  xy: 803, 1455
+  size: 40, 80
+  orig: 40, 80
+  offset: 0, 0
+  index: -1
+jumperred
+  rotate: false
+  xy: 1, 43
+  size: 40, 80
+  orig: 40, 80
+  offset: 0, 0
+  index: -1
+enemyblack
+  rotate: false
+  xy: 245, 167
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+enemyblue
+  rotate: false
+  xy: 803, 1413
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+enemygreen
+  rotate: false
+  xy: 845, 1495
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+enemyred
+  rotate: false
+  xy: 1, 1
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
