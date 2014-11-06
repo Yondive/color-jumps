@@ -1,7 +1,6 @@
 package ru.yondive.colorjumps;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,19 +9,18 @@ public class Jumper extends GameObject {
 		JUMP, FALL, HIT
 	}
 	
-	public static final float HEIGHT = 2f;
-	public static final float WIDTH = 1f;
+	public static final float HEIGHT = 2.4f;
+	public static final float WIDTH = 1.2f;
 	
-	public static final float START_VELOCITY_X = 4.5f;
+	public static final float START_VELOCITY_X = 5.5f;
 	public static final float START_VELOCITY_Y = 35f;
 	
 	private Vector2 velocity;
 	
 	private JumperStates state;
 	
-	
 	public Jumper(float x, float y) {
-		super(x, y, 0, WIDTH, HEIGHT);
+		super(x, y, 0, WIDTH, HEIGHT, Assets.jumperTRDes[0]);
 		velocity = new Vector2();
 		state = JumperStates.FALL;
 	}
@@ -35,14 +33,19 @@ public class Jumper extends GameObject {
 		return this.bounds.overlaps(bounds);
 	}
 	
-	public void update(float delta, float accel, boolean isColorChanged) {
-		if (isColorChanged) color = (color + 1) % 3;
-		
-		if (state != JumperStates.HIT && position.y <= World.FUND_HEIGHT) hitPlatform();
-		if (state != JumperStates.HIT) velocity.x = accel * START_VELOCITY_X;
+	public void update(float delta, float accel, boolean isColorChanged, float cameraY) {
+		if (isColorChanged) {
+			color = (color + 1) % 3;
+			setDrawable(Assets.jumperTRDes[color]);
+		}
 		
 		velocity.add(World.GRAVITY.x * delta, World.GRAVITY.y * delta);
 		position.add(velocity.x * delta, velocity.y * delta);
+		
+		if (state != JumperStates.HIT && position.y < (World.FUND_HEIGHT + World.HEIGHT / 2 - cameraY)) {
+			hitPlatform();
+		}
+		if (state != JumperStates.HIT) velocity.x = accel * START_VELOCITY_X;
 		
 		if (state == JumperStates.JUMP && velocity.y < 0) {
 			state = JumperStates.FALL;
@@ -61,19 +64,5 @@ public class Jumper extends GameObject {
 		}
 	}
 	
-	@Override
-	public void draw (Batch batch, float parentAlpha) {
 
-
-	    renderer.setProjectionMatrix(batch.getProjectionMatrix());
-	    renderer.setTransformMatrix(batch.getTransformMatrix());
-	    renderer.translate(position.x, position.y, 0);
-
-	    renderer.begin(ShapeType.Filled);
-	    renderer.setColor(colors[color]);
-	    renderer.rect(0, 0, getWidth(), getHeight());
-	    renderer.end();
-	    
-
-	}
 }

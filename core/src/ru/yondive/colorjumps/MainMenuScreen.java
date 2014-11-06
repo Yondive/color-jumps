@@ -21,13 +21,14 @@ public class MainMenuScreen implements Screen {
 		this.game = game;
 	}
 	
-	
-	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		stage.getBatch().begin();
+		stage.getBatch().draw(Assets.bgTR, 0, 0);
+		stage.getBatch().end();
 		stage.act(delta);
 		stage.draw();
 	}

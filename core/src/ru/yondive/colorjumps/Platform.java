@@ -1,24 +1,21 @@
 package ru.yondive.colorjumps;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
 public class Platform extends GameObject {
 	
 	private enum PlatformType {
 		Moving, Static
 	}
 	
-	public static final float HEIGHT = 0.5f;
+	public static final float HEIGHT = 1f;
 	public static final float WIDTH = 5f;
 	public static final float PLATFORM_VELOCITY_X = 6f;
 	
 	private PlatformType platformType;
 	private int dir;
 	
+	
 	public Platform(float x, float y, int color, int type) {
-		super(x, y, color, WIDTH, HEIGHT);
+		super(x, y, color, WIDTH, HEIGHT, Assets.platformTRDes[color]);
 		switch (type) {
 			case 0:
 				platformType = PlatformType.Static;
@@ -32,7 +29,7 @@ public class Platform extends GameObject {
 	}
 	
 	public boolean checkCollision(Jumper jumper) {
-		return (jumper.isSameColor(color) || colors[color] == Color.BLACK) && bounds.overlaps(jumper.bounds);
+		return (jumper.isSameColor(color) || color == 3) && bounds.overlaps(jumper.bounds) && (jumper.bounds.y >= bounds.y);
 	}
 	
 	public void update(float delta) {
@@ -48,21 +45,5 @@ public class Platform extends GameObject {
 			default:
 				break;
 		}
-	}
-	
-	@Override
-	public void draw (Batch batch, float parentAlpha) {
-
-
-	    renderer.setProjectionMatrix(batch.getProjectionMatrix());
-	    renderer.setTransformMatrix(batch.getTransformMatrix());
-	    renderer.translate(position.x, position.y, 0);
-
-	    renderer.begin(ShapeType.Filled);
-	    renderer.setColor(colors[color]);
-	    renderer.rect(0, 0, getWidth(), getHeight());
-	    renderer.end();
-	    
-
 	}
 }

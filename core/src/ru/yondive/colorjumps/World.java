@@ -8,14 +8,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class World {
-	public static final Vector2 GRAVITY = new Vector2(0f, -45f);
+	public static final Vector2 GRAVITY = new Vector2(0f, -46f);
 	public static final float HEIGHT = 32f;
 	public static final float WIDTH = 20f;
 
-	public static final float FUND_HEIGHT = 2f;
+	public static final float FUND_HEIGHT = 3.2f;
 	
 	public static final float LEVEL_HEIGHT = 36f;
 	public static final float MAX_PLATFORM_SPACE = 12f;
@@ -26,29 +27,29 @@ public class World {
 	private ArrayList<Platform> platforms;
 	private ArrayList<Enemy> enemies;
 	
-	private ColorJumps game;
 	private Random rand;
 	private int score;
 	
 	public World(Batch batch, ColorJumps game) {
 		this.platforms = new ArrayList<Platform>();
 		this.enemies = new ArrayList<Enemy>();
-		this.game = game;
 		this.rand = new Random();
 		stage = new Stage(new StretchViewport(WIDTH, HEIGHT), batch);
 		jumper = new Jumper(WIDTH / 2, FUND_HEIGHT);
 		stage.addActor(jumper);
 		score = 0;
-		
+		stage.addActor(new BackgroundObject(0, 0, WIDTH, FUND_HEIGHT, Assets.bgFundTRD));
+		addCreature();
 	}
 	
 	public int getScore() {
 		return score;
 	}
 	
+	
 	public int update(float delta, float accel, boolean isColorChanged) {
-		jumper.update(delta, accel, isColorChanged);
-		
+		jumper.update(delta, accel, isColorChanged, stage.getCamera().position.y);
+		stage.act();
 		for (Platform p : platforms) {
 			p.update(delta);;
 		}
@@ -84,6 +85,7 @@ public class World {
 		/* Update camera Y */
 		if (jumper.getY() > stage.getCamera().position.y) {
 			stage.getCamera().position.y = jumper.getY();
+			//stage.getCamera().update();
 		}
 		
 		return score;
