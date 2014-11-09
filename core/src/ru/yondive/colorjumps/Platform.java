@@ -6,8 +6,8 @@ public class Platform extends GameObject {
 		Moving, Static
 	}
 	
-	public static final float HEIGHT = 1f;
-	public static final float WIDTH = 5f;
+	public static final float HEIGHT = 0.5f;
+	public static final float WIDTH = 4f;
 	public static final float PLATFORM_VELOCITY_X = 6f;
 	
 	private PlatformType platformType;

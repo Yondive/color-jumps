@@ -1,8 +1,8 @@
 package ru.yondive.colorjumps;
 
 public class Enemy  extends GameObject{
-	public static final float HEIGHT = 1f;
-	public static final float WIDTH = 1f;
+	public static final float HEIGHT = 2f;
+	public static final float WIDTH = 2f;
 	
 	
 	public Enemy(float x, float y, int color) {

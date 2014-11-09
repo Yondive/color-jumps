@@ -19,7 +19,7 @@ public class World {
 	public static final float FUND_HEIGHT = 3.2f;
 	
 	public static final float LEVEL_HEIGHT = 36f;
-	public static final float MAX_PLATFORM_SPACE = 12f;
+	public static final float MAX_PLATFORM_SPACE = 11f;
 	
 	private Stage stage;
 	private Jumper jumper;
@@ -29,6 +29,7 @@ public class World {
 	
 	private Random rand;
 	private int score;
+	private float lastMainPlatformY = FUND_HEIGHT;
 	
 	public World(Batch batch, ColorJumps game) {
 		this.platforms = new ArrayList<Platform>();
@@ -39,7 +40,9 @@ public class World {
 		stage.addActor(jumper);
 		score = 0;
 		stage.addActor(new BackgroundObject(0, 0, WIDTH, FUND_HEIGHT, Assets.bgFundTRD));
-		addCreature();
+		generateObjects();
+		generateObjects();
+		generateObjects();
 	}
 	
 	public int getScore() {
@@ -51,7 +54,7 @@ public class World {
 		jumper.update(delta, accel, isColorChanged, stage.getCamera().position.y);
 		stage.act();
 		for (Platform p : platforms) {
-			p.update(delta);;
+			p.update(delta);
 		}
 		
 		score = Math.max(score, (int)jumper.getY());
@@ -85,28 +88,31 @@ public class World {
 		/* Update camera Y */
 		if (jumper.getY() > stage.getCamera().position.y) {
 			stage.getCamera().position.y = jumper.getY();
-			//stage.getCamera().update();
+			generateObjects();
 		}
 		
 		return score;
 	}
 	
-	public void draw() {
-		stage.draw();
+	private void generateObjects() {
+		//add main platform
+		if (jumper.getY() - lastMainPlatformY + HEIGHT >= MAX_PLATFORM_SPACE) {
+			lastMainPlatformY += MAX_PLATFORM_SPACE;
+			addPlatform(lastMainPlatformY, rand.nextInt(3), rand.nextInt(2));
+		}
+		
+		if (rand.nextFloat() > 0.9f) {
+			addPlatform(lastMainPlatformY + rand.nextInt((int)MAX_PLATFORM_SPACE), rand.nextInt(3), rand.nextInt(2));
+		}
+	}
+
+	private void addPlatform(float height, int color, int type) {
+		Platform newPlatform = new Platform(rand.nextFloat() * 15f, height, color, type);
+		platforms.add(newPlatform);
+		stage.addActor(newPlatform);
 	}
 	
-	private void addCreature() {
-		for (int i = 1; i < 20; i++) {
-			platforms.add(new Platform(rand.nextFloat() * 15f, i * MAX_PLATFORM_SPACE, rand.nextInt(4), 1));
-		}
-		for (int i = 1; i < 20; i++) {
-			enemies.add(new Enemy(rand.nextFloat() * 15f, 6 + i * MAX_PLATFORM_SPACE, rand.nextInt(4)));
-		}
-		for (Platform p : platforms) {
-			stage.addActor(p);
-		}
-		for (Enemy e : enemies) {
-			stage.addActor(e);
-		}
+	public void draw() {
+		stage.draw();
 	}
 }

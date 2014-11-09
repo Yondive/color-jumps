@@ -115,7 +115,7 @@ public class GameScreen implements Screen {
 		pauseStage.addActor(exit1);
 		
 		/* Filling game over stage */
-		menuScoreLabel = new Label("You get 0", new Label.LabelStyle(Assets.whiteFont, Color.PURPLE));
+		menuScoreLabel = new Label("You get 000", new Label.LabelStyle(Assets.whiteFont, Color.PURPLE));
 		menuScoreLabel.setPosition(ColorJumps.WIDTH / 2 - menuScoreLabel.getWidth() / 2, ColorJumps.HEIGHT - 2 * menuScoreLabel.getHeight());
 		
 		Label exit2 = new Label("Exit", new Label.LabelStyle(Assets.whiteFont, Color.BLACK));
