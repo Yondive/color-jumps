@@ -1,14 +1,10 @@
 package ru.yondive.colorjumps;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class World {
@@ -17,8 +13,6 @@ public class World {
 	public static final float WIDTH = 20f;
 
 	public static final float FUND_HEIGHT = 3.2f;
-	
-	public static final float LEVEL_HEIGHT = 36f;
 	public static final float MAX_PLATFORM_SPACE = 11f;
 	
 	private Stage stage;
@@ -29,7 +23,7 @@ public class World {
 	
 	private Random rand;
 	private int score;
-	private float lastMainPlatformY = FUND_HEIGHT;
+	private float lastMainPlatformY = HEIGHT;
 	
 	public World(Batch batch, ColorJumps game) {
 		this.platforms = new ArrayList<Platform>();
@@ -40,9 +34,9 @@ public class World {
 		stage.addActor(jumper);
 		score = 0;
 		stage.addActor(new BackgroundObject(0, 0, WIDTH, FUND_HEIGHT, Assets.bgFundTRD));
-		generateObjects();
-		generateObjects();
-		generateObjects();
+		for (int i = 0; i < 10; i++) {
+			addPlatform(MAX_PLATFORM_SPACE + i * HEIGHT / MAX_PLATFORM_SPACE, rand.nextInt(2), 0);
+		}
 	}
 	
 	public int getScore() {
@@ -98,11 +92,15 @@ public class World {
 		//add main platform
 		if (jumper.getY() - lastMainPlatformY + HEIGHT >= MAX_PLATFORM_SPACE) {
 			lastMainPlatformY += MAX_PLATFORM_SPACE;
-			addPlatform(lastMainPlatformY, rand.nextInt(3), rand.nextInt(2));
+			addPlatform(lastMainPlatformY, rand.nextInt(2), rand.nextInt(2));
 		}
 		
-		if (rand.nextFloat() > 0.9f) {
-			addPlatform(lastMainPlatformY + rand.nextInt((int)MAX_PLATFORM_SPACE), rand.nextInt(3), rand.nextInt(2));
+		if (rand.nextFloat() > 0.98f) {
+			addPlatform(lastMainPlatformY + rand.nextInt((int)MAX_PLATFORM_SPACE), rand.nextInt(2), rand.nextInt(2));
+		}
+		
+		if (rand.nextFloat() > 0.99f) {
+			addEnemy(lastMainPlatformY + rand.nextInt((int)MAX_PLATFORM_SPACE), rand.nextInt(3));
 		}
 	}
 
@@ -110,6 +108,12 @@ public class World {
 		Platform newPlatform = new Platform(rand.nextFloat() * 15f, height, color, type);
 		platforms.add(newPlatform);
 		stage.addActor(newPlatform);
+	}
+	
+	private void addEnemy(float height, int color) {
+		Enemy newEnemy = new Enemy(rand.nextFloat() * WIDTH - Enemy.WIDTH, height, color);
+		enemies.add(newEnemy);
+		stage.addActor(newEnemy);
 	}
 	
 	public void draw() {

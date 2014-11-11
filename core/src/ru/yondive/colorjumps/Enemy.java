@@ -10,7 +10,7 @@ public class Enemy  extends GameObject{
 	}
 	
 	public boolean checkCollision(Jumper jumper) {
-		return (jumper.isSameColor(color) || color == 3) && bounds.overlaps(jumper.bounds);
+		return (jumper.isSameColor(color) || color == 2) && bounds.overlaps(jumper.bounds);
 	}
 	
 

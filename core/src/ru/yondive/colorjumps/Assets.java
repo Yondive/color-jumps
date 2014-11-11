@@ -42,7 +42,7 @@ public class Assets {
 		enemyTRDes = new TextureRegionDrawable[] {
 				new TextureRegionDrawable(atlasGame.findRegion("enemygreen")),	
 				new TextureRegionDrawable(atlasGame.findRegion("enemyred")),
-				new TextureRegionDrawable(atlasGame.findRegion("enemyblue")),
+				//new TextureRegionDrawable(atlasGame.findRegion("enemyblue")),
 				new TextureRegionDrawable(atlasGame.findRegion("enemyblack"))
 		};
 	}

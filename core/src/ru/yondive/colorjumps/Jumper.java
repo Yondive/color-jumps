@@ -35,7 +35,7 @@ public class Jumper extends GameObject {
 	
 	public void update(float delta, float accel, boolean isColorChanged, float cameraY) {
 		if (isColorChanged) {
-			color = (color + 1) % 3;
+			color = (color + 1) % 2;
 			setDrawable(Assets.jumperTRDes[color]);
 		}
 		

@@ -29,7 +29,7 @@ public class Platform extends GameObject {
 	}
 	
 	public boolean checkCollision(Jumper jumper) {
-		return (jumper.isSameColor(color) || color == 3) && bounds.overlaps(jumper.bounds) && (jumper.bounds.y >= bounds.y);
+		return (jumper.isSameColor(color) || color == 2) && bounds.overlaps(jumper.bounds) && (jumper.bounds.y >= bounds.y);
 	}
 	
 	public void update(float delta) {
