@@ -35,7 +35,7 @@ public class Assets {
 		platformTRDes = new TextureRegionDrawable[] {
 				new TextureRegionDrawable(atlasGame.findRegion("platformgreen")),	
 				new TextureRegionDrawable(atlasGame.findRegion("platformred")),
-				new TextureRegionDrawable(atlasGame.findRegion("platformblue")),
+				//new TextureRegionDrawable(atlasGame.findRegion("platformblue")),
 				new TextureRegionDrawable(atlasGame.findRegion("platformblack"))
 		};
 		

@@ -92,7 +92,7 @@ public class World {
 		//add main platform
 		if (jumper.getY() - lastMainPlatformY + HEIGHT >= MAX_PLATFORM_SPACE) {
 			lastMainPlatformY += MAX_PLATFORM_SPACE;
-			addPlatform(lastMainPlatformY, rand.nextInt(2), rand.nextInt(2));
+			addPlatform(lastMainPlatformY, rand.nextInt(2), rand.nextInt(3));
 		}
 		
 		if (rand.nextFloat() > 0.98f) {
@@ -100,6 +100,7 @@ public class World {
 		}
 		
 		if (rand.nextFloat() > 0.99f) {
+			
 			addEnemy(lastMainPlatformY + rand.nextInt((int)MAX_PLATFORM_SPACE), rand.nextInt(3));
 		}
 	}
